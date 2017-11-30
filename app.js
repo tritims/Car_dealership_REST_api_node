@@ -1,17 +1,24 @@
 const express = require("express");
 const logger = require("morgan");
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+
+
+mongoose.Promise = global.Promise;
+//Connecting to database
+mongoose.connect('mongodb://localhost:cardealerapi');
+
+//Require router module
+const users = require("./routes/users");
 
 const app = express();
 
 //Middlewares
 app.use(logger('dev'));
+app.use(bodyParser.json());
 
 //Routes
-app.get('/', (req, res, next) => {
-    res.status(200).json({
-        message: 'You requested the index page'
-    })
-})
+app.use('/users', users);
 
 //Catch 404 errors and forward them to handlers
 app.use((req, res, next) =>{
